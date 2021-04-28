@@ -87,4 +87,5 @@ class Faction(Command):
         pass
 
 
-    async def accept(self, faction_name)
+    async def accept(self, faction_name):
+        pass
