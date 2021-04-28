@@ -37,6 +37,7 @@ class Faction(Command):
 
     # Allow user to create a faction room
     async def create(self, name):
+        name = name.lower()
         if not file_helper.faction_exists(name):
             faction_role = await self.guild.create_role(name=name, hoist=False)
             faction_category = await self.guild.create_category_channel(
@@ -50,6 +51,7 @@ class Faction(Command):
 
             file_helper.add_faction(name, self.message.author.id, faction_role.id, faction_category.id, faction_text.id, faction_voice.id)
             
+            await self.message.author.add_roles(faction_role)
             await self.message.channel.send("Faction created")
         else:
             await self.message.channel.send("A faction with this name already exists.")
@@ -57,6 +59,7 @@ class Faction(Command):
 
     # Allow user to remove a faction room
     async def remove(self, name):
+        name = name.lower()
         if file_helper.faction_exists(name):
             faction = file_helper.get_faction(name)
             if self.message.author.id == faction["leader"]:
@@ -71,3 +74,5 @@ class Faction(Command):
                 await self.message.channel.send("Faction removed")
                 
                 file_helper.remove_faction(name)
+        else:
+            self.message.guild.send("That faction does not exist")
