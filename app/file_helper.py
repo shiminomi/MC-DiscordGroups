@@ -16,7 +16,8 @@ empty_factions = {
     "role": 0,
     "category_id": 0,
     "text_channel": 0,
-    "voice_channel": 0
+    "voice_channel": 0,
+    "members": []
 }
 
 
@@ -50,6 +51,7 @@ def add_faction(name, creator, role_id, category_id, text_channel_id, voice_chan
         faction["category_id"] = category_id
         faction["text_channel"] = text_channel_id
         faction["voice_channel"] = voice_channel_id
+        faction["members"].append(creator)
         data["factions"][name] = faction
 
     save_json(data)

@@ -23,7 +23,11 @@ class Faction(Command):
                 await self.message.channel.send("`{}` is not a valid faction command.".format(self.args[0]))
             
             else:
-                await getattr(self, self.args[0])(*self.args[1:])
+                # Check if there are valid amount of arguments
+                if len(self.args[1:]) == faction_commands[self.args[0]]:
+                    await getattr(self, self.args[0])(*self.args[1:])
+                else:
+                    await self.message.channel.send("Insufficient arguments.")
         
         # Without any command
         else:
@@ -36,8 +40,8 @@ class Faction(Command):
 
 
     # Allow user to create a faction room
-    async def create(self, name):
-        name = name.lower()
+    async def create(self, faction_name):
+        name = faction_name.lower()
         if not file_helper.faction_exists(name):
             faction_role = await self.guild.create_role(name=name, hoist=False)
             faction_category = await self.guild.create_category_channel(
@@ -58,8 +62,8 @@ class Faction(Command):
 
 
     # Allow user to remove a faction room
-    async def remove(self, name):
-        name = name.lower()
+    async def remove(self, faction_name):
+        name = faction_name.lower()
         if file_helper.faction_exists(name):
             faction = file_helper.get_faction(name)
             if self.message.author.id == faction["leader"]:
@@ -76,3 +80,11 @@ class Faction(Command):
                 file_helper.remove_faction(name)
         else:
             self.message.guild.send("That faction does not exist")
+
+    
+    # Allow user to invite another user
+    async def invite(self, member_name):
+        pass
+
+
+    async def accept(self, faction_name)
