@@ -96,7 +96,7 @@ class Faction(Command):
 
     # Allow user to invite another user
     async def invite(self, member_name):
-        faction = file_helper.get_user_faction(self.message.author)
+        faction = file_helper.get_user_faction(self.message.author.id)
         if not faction:
             await self.message.channel.send("You are not in a faction!")
             return
@@ -110,7 +110,7 @@ class Faction(Command):
 
 
     async def uninvite(self, member_name):
-        faction = file_helper.get_user_faction(self.message.author)
+        faction = file_helper.get_user_faction(self.message.author.id)
         if not faction:
             await self.message.channel.send("You are not in a faction!")
             return
@@ -124,7 +124,7 @@ class Faction(Command):
 
 
     async def kick(self, member_name):
-        faction = file_helper.get_user_faction(self.message.author)
+        faction = file_helper.get_user_faction(self.message.author.id)
         if not self.message.author.id == faction["leader"]:
             await self.message.guild.send("You are not the faction leader!")
             return

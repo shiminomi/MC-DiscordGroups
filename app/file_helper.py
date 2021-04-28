@@ -14,7 +14,7 @@ empty_data = {
 # Invite will have a faction faction_name key into a list of user ids
 
 empty_faction = {
-    "name": ""
+    "name": "",
     "leader": 0,
     "role": 0,
     "category_id": 0,
