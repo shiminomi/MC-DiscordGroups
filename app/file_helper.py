@@ -8,10 +8,13 @@ logger = logging.getLogger(__name__)
 f_loc = "guild_data.json"
 
 empty_data = {
-    "factions": {}
+    "factions": {},
+    "invites": {}
 }
+# Invite will have a faction faction_name key into a list of user ids
 
-empty_factions = {
+empty_faction = {
+    "name": ""
     "leader": 0,
     "role": 0,
     "category_id": 0,
@@ -41,40 +44,73 @@ def save_json(data):
         f.write(json.dumps(data))
 
 
-def add_faction(name, creator, role_id, category_id, text_channel_id, voice_channel_id):
+def add_faction(faction_name, creator, role_id, category_id, text_channel_id, voice_channel_id):
     data = get_json()
 
-    if name not in data["factions"]:
-        faction = dict(empty_factions)
+    if faction_name not in data["factions"]:
+        faction = dict(empty_faction)
+        faction["name"] = faction_name
         faction["leader"] = creator
         faction["role"] = role_id
         faction["category_id"] = category_id
         faction["text_channel"] = text_channel_id
         faction["voice_channel"] = voice_channel_id
         faction["members"].append(creator)
-        data["factions"][name] = faction
+        data["factions"][faction_name] = faction
+        data["invites"][faction_name] = []
 
     save_json(data)
 
 
-def remove_faction(name):
+def remove_faction(faction_name):
     data = get_json()
 
-    if name in data["factions"]:
-        del data["factions"][name]
+    if faction_name in data["factions"]:
+        del data["factions"][faction_name]
+    if faction_name in data["invites"]:
+        del data["invites"][faction_name]
 
     save_json(data)
 
 
-def get_faction(name):
+def add_invite(faction_name, user_id):
     data = get_json()
 
-    if name in data["factions"]:
-        return data["factions"][name]
+    if faction_name in data["factions"] and faction_name in data["invites"]:
+        data["invites"][faction_name].append(user_id)
+    
+    save_json(data)
+
+
+def remove_invite(faction_name, user_id):
+    data = get_json()
+
+    if faction_name in data["factions"] and faction_name in data["invites"]:
+        if user_id in data["invites"][faction_name]:
+            data["invites"][faction_name].remove(user_id)
+    
+    save_json(data)
+
+
+def get_faction(faction_name):
+    data = get_json()
+
+    if faction_name in data["factions"]:
+        return data["factions"][faction_name]
 
     return None
 
 
-def faction_exists(name):
+def faction_exists(faction_name):
     data = get_json()
-    return name in data["factions"]
+    return faction_name in data["factions"]
+
+
+def get_user_faction(user_id):
+    data = get_json()
+
+    for faction in data["factions"]:
+        if user_id in data["factions"][faction]["members"]:
+            return data["factions"][faction]
+    
+    return None
