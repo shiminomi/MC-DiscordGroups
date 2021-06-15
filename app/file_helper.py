@@ -55,7 +55,7 @@ def add_faction(faction_name, creator, role_id, category_id, text_channel_id, vo
         faction["category_id"] = category_id
         faction["text_channel"] = text_channel_id
         faction["voice_channel"] = voice_channel_id
-        faction["members"].append(creator)
+        faction["members"] = [creator]
         data["factions"][faction_name] = faction
         data["invites"][faction_name] = []
 
