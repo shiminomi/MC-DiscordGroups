@@ -48,7 +48,7 @@ def add_faction(faction_name, creator, role_id, category_id, text_channel_id, vo
     data = get_json()
 
     if faction_name not in data["factions"]:
-        faction = dict(empty_faction)
+        faction = {}
         faction["name"] = faction_name
         faction["leader"] = creator
         faction["role"] = role_id
